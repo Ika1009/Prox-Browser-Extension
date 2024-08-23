@@ -1,59 +1,35 @@
 {
-    "manifest_version": 3,
-    "name": "Beni Alternative Shopper",
-    "version": "1.0",
-    "description": "Find alternative purchasing options while browsing products on major e-commerce websites.",
-    "action": {
-      "default_popup": "popup.html",
-      "default_title": "Beni Shopper"
-    },
-    "permissions": [
-      "activeTab",
-      "scripting",
-      "storage"
-    ],
-    "host_permissions": [
-      "https://www.amazon.com/*",
-      "https://www.target.com/*",
-      "https://www.walmart.com/*",
-      "https://www.facebook.com/marketplace/*",
-      "https://*.craigslist.org/*",
-      "https://*.yourlocalstore.com/*"
-    ],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "content_scripts": [
-      {
-        "matches": [
-          "https://www.amazon.com/*",
-          "https://www.target.com/*",
-          "https://www.walmart.com/*",
-          "https://www.facebook.com/marketplace/*",
-          "https://*.craigslist.org/*",
-          "https://*.yourlocalstore.com/*"
-        ],
-        "js": ["content.js"],
-        "css": ["dist/output.css"]
-      }
-    ],
-    "web_accessible_resources": [
-      {
-        "resources": [
-          "icons/*.png",
-          "popup.html",
-          "styles.css"
-        ],
-        "matches": ["<all_urls>"]
-      }
-    ],
-    "commands": {
-      "_execute_action": {
-        "suggested_key": {
-          "default": "Ctrl+Shift+Y",
-          "mac": "Command+Shift+Y"
-        }
-      }
+  "name": "Prox Alternative Shopper",
+  "version": "0.1.0",
+  "description": "Find alternative purchasing options while browsing products on major e-commerce websites.",
+  "permissions": ["storage", "tabs"],
+  "host_permissions": ["https://*.www.amazon.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.www.amazon.com/*"],
+      "js": ["contentScript.js"]
     }
-  }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*.jpg"
+      ],
+      "matches": ["https://*.www.amazon.com/*"]
+    }
+  ],
+  "action": {
+    "default_icon": {
+      "16": "assets/logo.jpg",
+      "24": "assets/logo.jpg",
+      "32": "assets/logo.jpg"
+    },
+    "default_title": "Prox Alternative Shopper",
+    "default_popup": "popup.html"
+  },
+  "manifest_version": 3
+}
   
