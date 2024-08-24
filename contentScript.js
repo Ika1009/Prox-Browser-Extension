@@ -9,10 +9,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
-const link = document.createElement('link');
-link.href = 'https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css'; // Use the correct version of Tailwind CSS
-link.rel = 'stylesheet';
-document.head.appendChild(link);
+const linkTailwind = document.createElement('link');
+linkTailwind.href = 'https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css'; 
+linkTailwind.rel = 'stylesheet';
+document.head.appendChild(linkTailwind);
+
+const linkFontAwesome = document.createElement('link');
+linkFontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"; 
+linkFontAwesome.rel = 'stylesheet';
+document.head.appendChild(linkFontAwesome);
 
 const appendPopup = (productId) => {
     // Create a div element to contain the popup
@@ -30,7 +35,7 @@ const appendPopup = (productId) => {
     popup.innerHTML = `
         <div class="w-96 bg-white shadow-lg rounded-lg overflow-hidden">
             <!-- Header -->
-            <div class="p-2 bg-teal-900 text-white flex justify-between items-center">
+            <div class="p-2 bg-green-900 text-white flex justify-between items-center">
                 <!-- Logo Image -->
                 <img src="https://bonanza.mycpanel.rs/ajnakafu/images/logo.jpg" alt="Prox Logo" class="h-8">
                 <button id="close-popup" class="text-white font-bold text-lg">✕</button>
@@ -39,13 +44,13 @@ const appendPopup = (productId) => {
             <!-- Filters and Buttons -->
             <div class="p-2 flex items-center bg-gray-50 border-b border-gray-200 space-x-1">
                 <!-- Set Alert Button with Bell Icon -->
-                <button class="bg-lime-400 font-bold text-teal-900 px-3 py-2 rounded-md flex items-center space-x-1">
+                <button class="bg-yellow-400 font-bold text-green-900 px-3 py-2 rounded-md flex items-center space-x-1">
                     <i class="far fa-bell"></i>
                     <span>Set Alert</span>
                 </button>
 
                 <!-- Filters Button with Gear Icon -->
-                <button class="bg-teal-900 font-bold text-white px-3 py-2 rounded-md flex items-center space-x-1">
+                <button class="bg-green-900 font-bold text-white px-3 py-2 rounded-md flex items-center space-x-1">
                     <i class="fas fa-sliders"></i>
                     <span>Filters</span>
                 </button>
