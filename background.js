@@ -9,3 +9,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     });
   }
 });
+
+chrome.action.onClicked.addListener((tab) => {
+  chrome.tabs.sendMessage(tab.id, { type: "REOPEN_POPUP" });
+});

@@ -554,6 +554,10 @@ video {
   --tw-contain-style:  ;
 }
 
+.visible {
+  visibility: visible;
+}
+
 .fixed {
   position: fixed;
 }
@@ -626,6 +630,10 @@ video {
 
 .rounded-md {
   border-radius: 0.375rem;
+}
+
+.border {
+  border-width: 1px;
 }
 
 .border-b {

@@ -27,8 +27,7 @@
       "24": "assets/logo.jpg",
       "32": "assets/logo.jpg"
     },
-    "default_title": "Prox Alternative Shopper",
-    "default_popup": "popup.html"
+    "default_title": "Prox Alternative Shopper"
   },
   "manifest_version": 3
 }

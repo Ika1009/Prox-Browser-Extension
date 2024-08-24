@@ -1,19 +1,24 @@
 // Listener for messages from background.js
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === "NEW") {
-      const productId = request.productId;
-      console.log("Product ID received:", productId);
-  
-      // Call the function to append the popup to the page
-      appendPopup(productId);
+        const productId = request.productId;
+        console.log("Product ID received:", productId);
+
+        // Call the function to append the popup to the page
+        appendPopup(productId);
+    } else if (request.type === "REOPEN_POPUP") {
+        // Toggle between showing the popup and the button
+        togglePopupAndButton();
     }
 });
 
+// Load Tailwind CSS
 const linkTailwind = document.createElement('link');
 linkTailwind.href = 'https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css'; 
 linkTailwind.rel = 'stylesheet';
 document.head.appendChild(linkTailwind);
 
+// Load Font Awesome
 const linkFontAwesome = document.createElement('link');
 linkFontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"; 
 linkFontAwesome.rel = 'stylesheet';
@@ -22,6 +27,7 @@ document.head.appendChild(linkFontAwesome);
 const appendPopup = (productId) => {
     // Create a div element to contain the popup
     const popup = document.createElement('div');
+    popup.id = 'popup-element';  // Add an ID to the popup for easy reference
 
     // Apply styles to the popup for positioning and appearance
     popup.style.position = 'fixed';
@@ -114,5 +120,47 @@ const appendPopup = (productId) => {
     // Add event listener to close the popup when the close button is clicked
     document.getElementById('close-popup').addEventListener('click', () => {
         popup.remove();
+        addReopenButton();
     });
+};
+
+const addReopenButton = () => {
+    const reopenButton = document.createElement('button');
+    reopenButton.id = 'reopen-button';  // Add an ID for the reopen button
+    reopenButton.style.position = 'fixed';
+    reopenButton.style.bottom = '20px';
+    reopenButton.style.right = '20px';
+    reopenButton.style.backgroundColor = '#4CAF50';
+    reopenButton.style.color = 'white';
+    reopenButton.style.border = 'none';
+    reopenButton.style.borderRadius = '50%';
+    reopenButton.style.padding = '10px';
+    reopenButton.style.zIndex = '1000';
+
+    // Add the logo inside the button
+    reopenButton.innerHTML = `<img src="https://bonanza.mycpanel.rs/ajnakafu/images/logo.jpg" alt="Prox Logo" style="width: 40px; height: 40px;">`;
+
+    // Append the reopen button to the body
+    document.body.appendChild(reopenButton);
+
+    // Add event listener to reopen the popup
+    reopenButton.addEventListener('click', () => {
+        appendPopup();
+        reopenButton.remove();
+    });
+};
+
+const togglePopupAndButton = () => {
+    const popup = document.getElementById('popup-element');
+    const reopenButton = document.getElementById('reopen-button');
+
+    if (popup) {
+        // If the popup is visible, close it and show the reopen button
+        popup.remove();
+        addReopenButton();
+    } else if (reopenButton) {
+        // If the reopen button is visible, hide it and show the popup
+        reopenButton.remove();
+        appendPopup();
+    }
 };
