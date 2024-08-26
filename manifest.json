@@ -3,13 +3,21 @@
   "version": "0.1.0",
   "description": "Find alternative purchasing options while browsing products on major e-commerce websites.",
   "permissions": ["storage", "tabs"],
-  "host_permissions": ["https://*.www.amazon.com/*"],
+  "host_permissions": [
+    "https://*.www.amazon.com/*",
+    "https://*.www.target.com/*",
+    "https://*.www.walmart.com/*"
+  ],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["https://*.www.amazon.com/*"],
+      "matches": [
+        "https://*.www.amazon.com/*",
+        "https://*.www.target.com/*",
+        "https://*.www.walmart.com/*"
+      ],
       "js": ["contentScript.js"]
     }
   ],
@@ -18,7 +26,11 @@
       "resources": [
         "assets/*.jpg"
       ],
-      "matches": ["https://*.www.amazon.com/*"]
+      "matches": [
+        "https://*.www.amazon.com/*",
+        "https://*.www.target.com/*",
+        "https://*.www.walmart.com/*"
+      ]
     }
   ],
   "action": {
@@ -31,4 +43,3 @@
   },
   "manifest_version": 3
 }
-  
