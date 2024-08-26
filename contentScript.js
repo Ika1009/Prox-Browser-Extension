@@ -56,7 +56,7 @@ const appendPopup = (productId) => {
     // Apply styles to the popup for positioning and appearance
     popup.style.position = 'fixed';
     popup.style.bottom = '450px';
-    popup.style.right = '100px';
+    popup.style.right = '90px';
     popup.style.width = '300px';
     popup.style.height = '200px';
     popup.style.zIndex = '1000';
@@ -140,17 +140,16 @@ const addReopenButton = () => {
     const reopenButton = document.createElement('button');
     reopenButton.id = 'reopen-button';  // Add an ID for the reopen button
     reopenButton.style.position = 'fixed';
-    reopenButton.style.bottom = '20px';
-    reopenButton.style.right = '20px';
-    reopenButton.style.backgroundColor = '#4CAF50';
-    reopenButton.style.color = 'white';
-    reopenButton.style.border = 'none';
-    reopenButton.style.borderRadius = '50%';
-    reopenButton.style.padding = '10px';
+    reopenButton.style.bottom = '450px';
+    reopenButton.style.right = '0px';
+    reopenButton.style.backgroundColor = 'transparent';  // Remove background color
+    reopenButton.style.border = 'none';  // Remove border
+    reopenButton.style.padding = '0';  // Remove padding
     reopenButton.style.zIndex = '1000';
+    reopenButton.style.cursor = 'pointer';  // Add a pointer cursor for better UX
 
     // Add the logo inside the button
-    reopenButton.innerHTML = `<img src="https://bonanza.mycpanel.rs/ajnakafu/images/logo.jpg" alt="Prox Logo" style="width: 40px; height: 40px;">`;
+    reopenButton.innerHTML = `<img src="https://bonanza.mycpanel.rs/ajnakafu/images/logo.jpg" alt="Prox Logo" style="width: 60px; height: 60px;">`;
 
     // Append the reopen button to the body
     document.body.appendChild(reopenButton);
