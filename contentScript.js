@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             .then((productData) => appendPopup(productData))
             .catch((error) => {
                 console.error('Error fetching product data:', error);
-                console.log('Product Info:', productInfo);
+                console.log('Error Details:', error.message || error);
             });
 
     } else if (request.type === "REOPEN_POPUP") {
@@ -184,30 +184,35 @@ const togglePopupAndButton = () => {
 };
 
 const fetchProductData = async (productName) => {
-    const response = await fetch('https://realtime.oxylabs.io/v1/queries', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Basic ' + btoa('_prox_RQ99U:R8kTz3_bG4sQ')
-        },
-        body: JSON.stringify({
-            source: 'amazon_product',
-            domain: 'com',
-            query: productName,
-            parse: true,
-            context: [
-                {
-                    key: 'autoselect_variant',
-                    value: true
-                }
-            ]
-        })
-    });
+    try {
+        const response = await fetch('https://realtime.oxylabs.io/v1/queries', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + btoa('_prox_RQ99U:R8kTz3_bG4sQ')
+            },
+            body: JSON.stringify({
+                source: 'amazon_search',
+                domain: 'com',
+                query: productName,
+                parse: true,
+                context: [
+                    {
+                        key: 'autoselect_variant',
+                        value: true
+                    }
+                ]
+            })
+        });
 
-    if (response.ok) {
-        const data = await response.json();
-        return data.results;
-    } else {
-        console.error('Failed to fetch product data');
+        if (response.ok) {
+            const data = await response.json();
+            return data.results;
+        } else {
+            const errorDetails = await response.text();
+            console.error('Failed to fetch product data:', errorDetails);
+        }
+    } catch (error) {
+        console.error('Error in fetchProductData:', error);
     }
 };
