@@ -17,8 +17,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.log("Product Info received:", productInfo);
 
         fetchProductData(productInfo.title)
-            .then(productData => appendPopup(productData))
-            .catch(error => console.error('Error fetching product data:', error));
+            .then((productData) => appendPopup(productData))
+            .catch((error) => {
+                console.error('Error fetching product data:', error);
+                console.log('Product Info:', productInfo);
+            });
 
     } else if (request.type === "REOPEN_POPUP") {
         // Toggle between showing the popup and the button
