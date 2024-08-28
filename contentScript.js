@@ -4,8 +4,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const productId = request.productId;
         console.log("Product ID received:", productId);
 
-        // Call the function to append the popup to the page
-        appendPopup(productId);
+        fetchProductData(productId)
+            .then(productData => displayProductData(productData))
+            .catch(error => console.error('Error fetching product data:', error));
+
     } else if (request.type === "REOPEN_POPUP") {
         // Toggle between showing the popup and the button
         togglePopupAndButton();
@@ -174,4 +176,46 @@ const togglePopupAndButton = () => {
         reopenButton.remove();
         appendPopup();
     }
+};
+
+const fetchProductData = async (productId) => {
+    const response = await fetch('https://realtime.oxylabs.io/v1/queries', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa('USERNAME:PASSWORD')
+        },
+        body: JSON.stringify({
+            source: 'amazon_product',
+            domain: 'com',
+            query: productId,
+            parse: true,
+            context: [
+                {
+                    key: 'autoselect_variant',
+                    value: true
+                }
+            ]
+        })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data.results;
+    } else {
+        console.error('Failed to fetch product data');
+    }
+};
+
+const displayProductData = (productData) => {
+    const productInfo = {
+        title: productData.title || 'Title not found',
+        priceSymbol: productData.currency || '$',
+        priceWhole: productData.price || 'Price not found',
+        image: productData.image || 'Image not found'
+    };
+
+    console.log("Product Info:", productInfo);
+    // Use productInfo to update your popup or UI
+    appendPopup(productInfo);
 };
