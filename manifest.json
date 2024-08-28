@@ -2,7 +2,7 @@
   "name": "Prox Alternative Shopper",
   "version": "0.1.0",
   "description": "Find alternative purchasing options while browsing products on major e-commerce websites.",
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "https://realtime.oxylabs.io/*"],
   "host_permissions": [
     "https://*.www.amazon.com/*",
     "https://*.www.target.com/*",
