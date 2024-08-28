@@ -1,19 +1,3 @@
-// Listener for messages from background.js
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === "NEW") {
-        const productId = request.productId;
-        console.log("Product ID received:", productId);
-
-        fetchProductData(productId)
-            .then(productData => displayProductData(productData))
-            .catch(error => console.error('Error fetching product data:', error));
-
-    } else if (request.type === "REOPEN_POPUP") {
-        // Toggle between showing the popup and the button
-        togglePopupAndButton();
-    }
-});
-
 // Load Tailwind CSS
 const linkTailwind = document.createElement('link');
 linkTailwind.href = 'https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.css'; 
@@ -25,6 +9,22 @@ const linkFontAwesome = document.createElement('link');
 linkFontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"; 
 linkFontAwesome.rel = 'stylesheet';
 document.head.appendChild(linkFontAwesome);
+
+// Listener for messages from background.js
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === "NEW") {
+        const productInfo = collectProductInfo();
+        console.log("Product Info received:", productInfo);
+
+        fetchProductData(productInfo.title)
+            .then(productData => appendPopup(productData))
+            .catch(error => console.error('Error fetching product data:', error));
+
+    } else if (request.type === "REOPEN_POPUP") {
+        // Toggle between showing the popup and the button
+        togglePopupAndButton();
+    }
+});
 
 const collectProductInfo = () => {
     let productTitle = document.querySelector('#productTitle')?.textContent.trim();
@@ -50,7 +50,12 @@ const collectProductInfo = () => {
 const productInfo = collectProductInfo();
 console.log("Product Info:", productInfo);
 
-const appendPopup = (productId) => {
+const appendPopup = (fetchedData) => {
+    // Extract relevant data from the fetchedData object
+    const productTitle = fetchedData.title || 'Title not available';
+    const productPrice = fetchedData.price || 'Price not available';
+    const productImage = fetchedData.image || 'https://via.placeholder.com/150';  // Fallback image
+
     // Create a div element to contain the popup
     const popup = document.createElement('div');
     popup.id = 'popup-element';  // Add an ID to the popup for easy reference
@@ -96,20 +101,17 @@ const appendPopup = (productId) => {
 
             <!-- Content Section -->
             <div class="p-4">
-                <h2 class="text-xl font-semibold mb-4">Product ID: ${productId}</h2> <!-- Displaying Product ID -->
+                <h2 class="text-xl font-semibold mb-4">${productTitle}</h2> <!-- Displaying Product Title -->
 
-                <!-- Item List -->
+                <!-- Item Display -->
                 <div class="grid grid-cols-2 gap-4">
-                    <!-- Item 1 -->
                     <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                        <img src="${productInfo.image}" alt="${productInfo.title}" class="w-full h-32 object-cover">
+                        <img src="${productImage}" alt="${productTitle}" class="w-full h-32 object-cover">
                         <div class="p-2">
-                            <h3 class="text-sm font-semibold">${productInfo.title}</h3>
+                            <h3 class="text-sm font-semibold">${productTitle}</h3>
                             <div class="flex items-center mt-2">
-                                <span class="text-lg font-bold text-green-600 flex items-baseline">
-                                    <span class="text-base">${productInfo.priceSymbol}</span>
-                                    <span class="text-2xl">${productInfo.priceWhole}</span>
-                                    <span class="text-sm text-gray-500 ml-1">.${productInfo.priceFraction}</span>
+                                <span class="text-lg font-bold text-green-600">
+                                    ${productPrice}
                                 </span>
                             </div>
                         </div>
@@ -124,7 +126,6 @@ const appendPopup = (productId) => {
                 <i class="far fa-bell text-lg text-gray-600"></i>       <!-- Outlined Bell Icon -->
                 <i class="fas fa-bars text-lg text-gray-600"></i>       <!-- Menu Icon -->
             </div>
-
         </div>
     `;
 
@@ -137,6 +138,7 @@ const appendPopup = (productId) => {
         addReopenButton();
     });
 };
+
 
 const addReopenButton = () => {
     const reopenButton = document.createElement('button');
@@ -178,17 +180,17 @@ const togglePopupAndButton = () => {
     }
 };
 
-const fetchProductData = async (productId) => {
+const fetchProductData = async (productName) => {
     const response = await fetch('https://realtime.oxylabs.io/v1/queries', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Basic ' + btoa('USERNAME:PASSWORD')
+            'Authorization': 'Basic ' + btoa('_prox_RQ99U:R8kTz3_bG4sQ')
         },
         body: JSON.stringify({
             source: 'amazon_product',
             domain: 'com',
-            query: productId,
+            query: productName,
             parse: true,
             context: [
                 {
@@ -205,17 +207,4 @@ const fetchProductData = async (productId) => {
     } else {
         console.error('Failed to fetch product data');
     }
-};
-
-const displayProductData = (productData) => {
-    const productInfo = {
-        title: productData.title || 'Title not found',
-        priceSymbol: productData.currency || '$',
-        priceWhole: productData.price || 'Price not found',
-        image: productData.image || 'Image not found'
-    };
-
-    console.log("Product Info:", productInfo);
-    // Use productInfo to update your popup or UI
-    appendPopup(productInfo);
 };
