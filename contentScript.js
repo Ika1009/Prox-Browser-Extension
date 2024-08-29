@@ -14,13 +14,11 @@ document.head.appendChild(linkFontAwesome);
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === "NEW") {
         const productInfo = collectProductInfo();
-        console.log("Product Info received:", productInfo);
 
         fetchProductData(productInfo.title)
             .then((productData) => appendPopup(productData))
             .catch((error) => {
                 console.error('Error fetching product data:', error);
-                console.log('Error Details:', error.message || error);
             });
 
     } else if (request.type === "REOPEN_POPUP") {
@@ -48,10 +46,6 @@ const collectProductInfo = () => {
         image: productImage || 'Image not found'
     };
 };
-
-// Example usage
-const productInfo = collectProductInfo();
-console.log("Product Info:", productInfo);
 
 const appendPopup = (fetchedData) => {
     // Extract relevant data from the fetchedData object
@@ -184,6 +178,7 @@ const togglePopupAndButton = () => {
 };
 
 const fetchProductData = async (productName) => {
+    console.log(productName);
     try {
         const response = await fetch('https://realtime.oxylabs.io/v1/queries', {
             method: 'POST',
