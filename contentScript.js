@@ -13,7 +13,7 @@ document.head.appendChild(linkFontAwesome);
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === "NEW") {
-        const productInfo = collectProductInfo();
+        const productInfo = collectProductInfo(); // Collect product info when "NEW" message is received
         console.log("Product Info received:", productInfo);
 
         // Send product name to the background script to fetch additional data
@@ -35,13 +35,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
-chrome.runtime.sendMessage({ type: "FETCH_PRODUCT_DATA", productName: productInfo.title }, (response) => {
-    if (response.success) {
-        appendPopup(response.data);
-    } else {
-        console.error("Error fetching product data:", response.error);
-    }
-});
+// This block should be inside the `chrome.runtime.onMessage.addListener` block where `productInfo` is defined
+// Removed the duplicate chrome.runtime.sendMessage block
+// Removed the incorrect usage of `productInfo` outside its scope
 
 const collectProductInfo = () => {
     let productTitle = document.querySelector('#productTitle')?.textContent.trim();
