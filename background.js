@@ -32,7 +32,7 @@ const fetchProductData = async (productName) => {
               'Authorization': 'Basic ' + btoa('_prox_RQ99U:R8kTz3_bG4sQ')
           },
           body: JSON.stringify({
-              source: 'amazon_product',
+              source: 'amazon_search',
               domain: 'com',
               query: productName,
               parse: true,
