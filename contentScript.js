@@ -10,17 +10,25 @@ linkFontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.
 linkFontAwesome.rel = 'stylesheet';
 document.head.appendChild(linkFontAwesome);
 
-// Listener for messages from background.js
+// Listen for messages from the background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === "NEW") {
         const productInfo = collectProductInfo();
+        console.log("Product Info received:", productInfo);
 
-        fetchProductData(productInfo.title)
-            .then((productData) => appendPopup(productData))
-            .catch((error) => {
-                console.error('Error fetching product data:', error);
-            });
-
+        // Send product name to the background script to fetch additional data
+        chrome.runtime.sendMessage(
+            { type: "FETCH_PRODUCT_DATA", productName: productInfo.title }, 
+            (response) => {
+                if (response.success) {
+                    console.log("Fetched Product Data:", response.data);
+                    // Call the function to append the popup to the page with the fetched data
+                    appendPopup(response.data);
+                } else {
+                    console.error("Error fetching product data:", response.error);
+                }
+            }
+        );
     } else if (request.type === "REOPEN_POPUP") {
         // Toggle between showing the popup and the button
         togglePopupAndButton();
