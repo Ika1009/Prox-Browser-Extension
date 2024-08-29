@@ -14,14 +14,12 @@ document.head.appendChild(linkFontAwesome);
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === "NEW") {
         const productInfo = collectProductInfo(); // Collect product info when "NEW" message is received
-        console.log("Product Info received:", productInfo);
 
         // Send product name to the background script to fetch additional data
         chrome.runtime.sendMessage(
             { type: "FETCH_PRODUCT_DATA", productName: productInfo.title }, 
             (response) => {
                 if (response.success) {
-                    console.log("Fetched Product Data:", response.data);
                     // Call the function to append the popup to the page with the fetched data
                     appendPopup(response.data);
                 } else {
@@ -60,6 +58,7 @@ const collectProductInfo = () => {
 };
 
 const appendPopup = (fetchedData) => {
+    console.log(fetchedData);
     // Check if fetchedData is null or undefined
     if (!fetchedData) {
         console.error("Error: fetchedData is null or undefined.");
