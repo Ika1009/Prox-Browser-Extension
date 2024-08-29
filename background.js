@@ -14,6 +14,7 @@ chrome.action.onClicked.addListener((tab) => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === "FETCH_PRODUCT_DATA") {
+    console.log(request.productName);
       fetchProductData(request.productName)
           .then(data => sendResponse({ success: true, data }))
           .catch(error => sendResponse({ success: false, error }));
