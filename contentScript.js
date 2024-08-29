@@ -58,7 +58,7 @@ const collectProductInfo = () => {
 };
 
 const appendPopup = (fetchedData) => {
-    console.log(fetchedData);
+    console.log(fetchedData[0].url);
     // Check if fetchedData is null or undefined
     if (!fetchedData) {
         console.error("Error: fetchedData is null or undefined.");
