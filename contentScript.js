@@ -27,6 +27,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
+chrome.runtime.sendMessage({ type: "FETCH_PRODUCT_DATA", productName: productInfo.title }, (response) => {
+    if (response.success) {
+        appendPopup(response.data);
+    } else {
+        console.error("Error fetching product data:", response.error);
+    }
+});
+
 const collectProductInfo = () => {
     let productTitle = document.querySelector('#productTitle')?.textContent.trim();
     let productPriceSymbol = document.querySelector('.a-price-symbol')?.textContent.trim();
@@ -174,40 +182,5 @@ const togglePopupAndButton = () => {
         // If the reopen button is visible, hide it and show the popup
         reopenButton.remove();
         appendPopup();
-    }
-};
-
-const fetchProductData = async (productName) => {
-    console.log(productName);
-    try {
-        const response = await fetch('https://realtime.oxylabs.io/v1/queries', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Basic ' + btoa('_prox_RQ99U:R8kTz3_bG4sQ')
-            },
-            body: JSON.stringify({
-                source: 'amazon_search',
-                domain: 'com',
-                query: productName,
-                parse: true,
-                context: [
-                    {
-                        key: 'autoselect_variant',
-                        value: true
-                    }
-                ]
-            })
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            return data.results;
-        } else {
-            const errorDetails = await response.text();
-            console.error('Failed to fetch product data:', errorDetails);
-        }
-    } catch (error) {
-        console.error('Error in fetchProductData:', error);
     }
 };
