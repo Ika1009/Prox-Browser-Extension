@@ -58,18 +58,11 @@ const collectProductInfo = () => {
 };
 
 const appendPopup = (fetchedData) => {
-    console.log(fetchedData[0].url);
-    // Check if fetchedData is null or undefined
-    if (!fetchedData) {
-        console.error("Error: fetchedData is null or undefined.");
-        // Optionally, you can return here to avoid appending a popup with missing data
-        return;
-    }
-
+    const searchResult = fetchedData[0].url;
     // Extract relevant data from the fetchedData object
-    const productTitle = fetchedData.title || 'Title not available';
-    const productPrice = fetchedData.price || 'Price not available';
-    const productImage = fetchedData.image || 'https://via.placeholder.com/150';  // Fallback image
+    //const productTitle = fetchedData.title || 'Title not available';
+    //const productPrice = fetchedData.price || 'Price not available';
+    //const productImage = fetchedData.image || 'https://via.placeholder.com/150';  // Fallback image
 
     // Create a div element to contain the popup
     const popup = document.createElement('div');
@@ -116,22 +109,7 @@ const appendPopup = (fetchedData) => {
 
             <!-- Content Section -->
             <div class="p-4">
-                <h2 class="text-xl font-semibold mb-4">${productTitle}</h2> <!-- Displaying Product Title -->
-
-                <!-- Item Display -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                        <img src="${productImage}" alt="${productTitle}" class="w-full h-32 object-cover">
-                        <div class="p-2">
-                            <h3 class="text-sm font-semibold">${productTitle}</h3>
-                            <div class="flex items-center mt-2">
-                                <span class="text-lg font-bold text-green-600">
-                                    ${productPrice}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h2 class="text-xl font-semibold mb-4">${searchResult}</h2> <!-- Displaying Search result link -->
             </div>
 
             <!-- Icon Row at the End of Popup -->
