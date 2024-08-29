@@ -60,6 +60,13 @@ const collectProductInfo = () => {
 };
 
 const appendPopup = (fetchedData) => {
+    // Check if fetchedData is null or undefined
+    if (!fetchedData) {
+        console.error("Error: fetchedData is null or undefined.");
+        // Optionally, you can return here to avoid appending a popup with missing data
+        return;
+    }
+
     // Extract relevant data from the fetchedData object
     const productTitle = fetchedData.title || 'Title not available';
     const productPrice = fetchedData.price || 'Price not available';
@@ -147,7 +154,6 @@ const appendPopup = (fetchedData) => {
         addReopenButton();
     });
 };
-
 
 const addReopenButton = () => {
     const reopenButton = document.createElement('button');
