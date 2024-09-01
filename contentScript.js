@@ -59,7 +59,7 @@ const collectProductInfo = () => {
 
 const appendPopup = (fetchedData) => {
     console.log(fetchedData);
-    const products = fetchedData.results[0].content.results.organic;
+    const products = fetchedData[0].content.results.organic;
 
     // Create a div element to contain the popup
     const popup = document.createElement('div');
