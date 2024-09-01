@@ -128,7 +128,6 @@ const appendPopup = (fetchedData) => {
     products.forEach(product => {
         // Product HTML Template
         const productHTML = `
-            <h2 class="text-xl font-semibold mb-4">${product.title}</h2>
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <a href="https://www.amazon.com${product.url}" target="_blank" class="block hover:bg-gray-100">
