@@ -106,7 +106,7 @@ const appendPopup = (fetchedData) => {
             </div>
 
             <!-- Content Section -->
-            <div id='products-container' class="p-4 max-h-96 overflow-auto">
+            <div id='products-container' class="p-4 max-h-96 overflow-auto flex flex-wrap gap-4">
                 
             </div>
 
@@ -128,20 +128,18 @@ const appendPopup = (fetchedData) => {
     products.forEach(product => {
         // Product HTML Template
         const productHTML = `
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                    <a href="https://www.amazon.com${product.url}" target="_blank" class="block hover:bg-gray-100">
-                        <img src="${product.url_image}" alt="${product.title}" class="w-full h-32 object-cover">
-                        <div class="p-2">
-                            <h3 class="text-sm font-semibold">${product.title}</h3>
-                            <div class="flex items-center mt-2">
-                                <span class="text-lg font-bold text-green-600">
-                                    $${product.price}
-                                </span>
-                            </div>
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden flex-none w-44">
+                <a href="https://www.amazon.com${product.url}" target="_blank" class="block hover:bg-gray-100">
+                    <img src="${product.url_image}" alt="${product.title}" class="w-full h-32 object-cover">
+                    <div class="p-2">
+                        <h3 class="text-sm font-semibold">${product.title}</h3>
+                        <div class="flex items-center mt-2">
+                            <span class="text-lg font-bold text-green-600">
+                                $${product.price}
+                            </span>
                         </div>
-                    </a>
-                </div>
+                    </div>
+                </a>
             </div>
         `;
 
