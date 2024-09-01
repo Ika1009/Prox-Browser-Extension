@@ -58,6 +58,7 @@ const collectProductInfo = () => {
 };
 
 const appendPopup = (fetchedData) => {
+    console.log(fetchedData);
     const searchResult = fetchedData[0].url;
     // Extract relevant data from the fetchedData object
     //const productTitle = fetchedData.title || 'Title not available';
