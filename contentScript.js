@@ -58,12 +58,7 @@ const collectProductInfo = () => {
 };
 
 const appendPopup = (fetchedData) => {
-    console.log(fetchedData);
-    const searchResult = fetchedData[0].url;
-    // Extract relevant data from the fetchedData object
-    //const productTitle = fetchedData.title || 'Title not available';
-    //const productPrice = fetchedData.price || 'Price not available';
-    //const productImage = fetchedData.image || 'https://via.placeholder.com/150';  // Fallback image
+    const products = fetchedData.results[0].content.results.organic;
 
     // Create a div element to contain the popup
     const popup = document.createElement('div');
@@ -109,8 +104,8 @@ const appendPopup = (fetchedData) => {
             </div>
 
             <!-- Content Section -->
-            <div class="p-4">
-                <h2 class="text-xl font-semibold mb-4">${searchResult}</h2> <!-- Displaying Search result link -->
+            <div id='products-container' class="p-4">
+                
             </div>
 
             <!-- Icon Row at the End of Popup -->
@@ -125,6 +120,36 @@ const appendPopup = (fetchedData) => {
 
     // Append the popup to the body of the page
     document.body.appendChild(popup);
+
+    const container = document.getElementById('products-container'); // Get your existing container element
+    
+    products.forEach(product => {
+        // Product HTML Template
+        const productHTML = `
+            <h2 class="text-xl font-semibold mb-4">${product.title}</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <a href="https://www.amazon.com${product.url}" target="_blank" class="block hover:bg-gray-100">
+                        <img src="${product.url_image}" alt="${product.title}" class="w-full h-32 object-cover">
+                        <div class="p-2">
+                            <h3 class="text-sm font-semibold">${product.title}</h3>
+                            <div class="flex items-center mt-2">
+                                <span class="text-lg font-bold text-green-600">
+                                    $${product.price}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        `;
+
+        // Append the HTML to the existing container
+        container.innerHTML += productHTML;
+
+        // Append the product div to the container
+        popup.appendChild(productDiv);
+    });
 
     // Add event listener to close the popup when the close button is clicked
     document.getElementById('close-popup').addEventListener('click', () => {
