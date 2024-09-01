@@ -33,13 +33,15 @@ const fetchProductData = async (productName) => {
           },
           body: JSON.stringify({
               source: 'amazon_search',
-              domain: 'com',
-              query: productName,
+              domain: 'nl',
+              query: 'nirvana tshirt',
+              start_page: 2,
+              pages: 2,
               parse: true,
               context: [
                   {
-                      key: 'autoselect_variant',
-                      value: true
+                      key: 'category_id',
+                      value: '16391693031'
                   }
               ]
           })
