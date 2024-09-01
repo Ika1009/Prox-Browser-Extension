@@ -106,7 +106,7 @@ const appendPopup = (fetchedData) => {
             </div>
 
             <!-- Content Section -->
-            <div id='products-container' class="p-4 max-h-96 overflow-auto flex flex-wrap gap-4">
+            <div id='products-container' class="p-4 max-h-96 overflow-auto flex flex-wrap">
                 
             </div>
 
@@ -128,7 +128,7 @@ const appendPopup = (fetchedData) => {
     products.forEach(product => {
         // Product HTML Template
         const productHTML = `
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden flex-none w-44">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden w-40"> <!-- Adjust width as necessary -->
                 <a href="https://www.amazon.com${product.url}" target="_blank" class="block hover:bg-gray-100">
                     <img src="${product.url_image}" alt="${product.title}" class="w-full h-32 object-cover">
                     <div class="p-2">
