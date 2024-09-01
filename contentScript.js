@@ -148,9 +148,6 @@ const appendPopup = (fetchedData) => {
 
         // Append the HTML to the existing container
         container.innerHTML += productHTML;
-
-        // Append the product div to the container
-        popup.appendChild(productDiv);
     });
 
     // Add event listener to close the popup when the close button is clicked
