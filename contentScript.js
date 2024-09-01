@@ -106,7 +106,7 @@ const appendPopup = (fetchedData) => {
             </div>
 
             <!-- Content Section -->
-            <div id='products-container' class="p-4">
+            <div id='products-container' class="p-4 max-h-96 overflow-auto">
                 
             </div>
 
