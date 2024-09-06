@@ -33,10 +33,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
-// This block should be inside the `chrome.runtime.onMessage.addListener` block where `productInfo` is defined
-// Removed the duplicate chrome.runtime.sendMessage block
-// Removed the incorrect usage of `productInfo` outside its scope
-
+// Collect product information from the page
 const collectProductInfo = () => {
     let productTitle = document.querySelector('#productTitle')?.textContent.trim();
     let productPriceSymbol = document.querySelector('.a-price-symbol')?.textContent.trim();
@@ -57,9 +54,11 @@ const collectProductInfo = () => {
     };
 };
 
+// Append the popup with product data
 const appendPopup = (fetchedData) => {
     console.log(fetchedData);
-    const products = fetchedData[0].content.results.organic;
+    // Since data could be an array, loop through it to extract products
+    const products = fetchedData; // Adjusted to directly use fetched data as an array
     console.log(products);
 
     // Create a div element to contain the popup
@@ -74,7 +73,7 @@ const appendPopup = (fetchedData) => {
     popup.style.height = '200px';
     popup.style.zIndex = '1000';
 
-    // Add the popup content from your popup.html with dynamic content
+    // Add the popup content with dynamic content
     popup.innerHTML = `
         <div class="w-96 bg-white shadow-lg rounded-lg overflow-hidden">
             <!-- Header -->
@@ -129,13 +128,13 @@ const appendPopup = (fetchedData) => {
         // Product HTML Template
         const productHTML = `
             <div class="bg-white rounded-lg shadow-sm overflow-hidden w-40"> <!-- Adjust width as necessary -->
-                <a href="https://www.amazon.com${product.url}" target="_blank" class="block hover:bg-gray-100">
-                    <img src="${product.url_image}" alt="${product.title}" class="w-full h-32 object-cover">
+                <a href="${product.link}" target="_blank" class="block hover:bg-gray-100">
+                    <img src="${product.image}" alt="${product.title}" class="w-full h-32 object-cover">
                     <div class="p-2">
                         <h3 class="text-sm font-semibold">${product.title}</h3>
                         <div class="flex items-center mt-2">
                             <span class="text-lg font-bold text-green-600">
-                                $${product.price}
+                                ${product.price}
                             </span>
                         </div>
                     </div>
@@ -154,6 +153,7 @@ const appendPopup = (fetchedData) => {
     });
 };
 
+// Add a button to reopen the popup
 const addReopenButton = () => {
     const reopenButton = document.createElement('button');
     reopenButton.id = 'reopen-button';  // Add an ID for the reopen button
@@ -179,6 +179,7 @@ const addReopenButton = () => {
     });
 };
 
+// Toggle between showing the popup and the reopen button
 const togglePopupAndButton = () => {
     const popup = document.getElementById('popup-element');
     const reopenButton = document.getElementById('reopen-button');
