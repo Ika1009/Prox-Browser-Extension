@@ -28,7 +28,7 @@ const fetchProductData = async (productName) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + btoa('_prox_RQ99U:R8kTz3_bG4sQ')
+          'Authorization': 'Basic ' + btoa('_prox_RQ99U:Miloskralj2005_')
         },
         body: JSON.stringify({
           source: 'amazon_search',
@@ -47,7 +47,7 @@ const fetchProductData = async (productName) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + btoa('_prox_RQ99U:R8kTz3_bG4sQ') // Replace with your own credentials
+          'Authorization': 'Basic ' + btoa('_prox_RQ99U:Miloskralj2005_') // Replace with your own credentials
         },
         body: JSON.stringify({
           source: 'google_shopping_search',
