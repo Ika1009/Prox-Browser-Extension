@@ -1,3 +1,6 @@
+// Global variable to store fetched products
+let fetchedProducts = [];
+
 // Load Tailwind CSS
 const linkTailwind = document.createElement('link');
 linkTailwind.href = 'https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.css'; 
@@ -15,13 +18,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === "NEW") {
         const productInfo = collectProductInfo(); // Collect product info when "NEW" message is received
         console.log(productInfo);
+
         // Send product name to the background script to fetch additional data
         chrome.runtime.sendMessage(
             { type: "FETCH_PRODUCT_DATA", productName: productInfo.title }, 
             (response) => {
                 if (response.success) {
+                    // Store the fetched data globally
+                    fetchedProducts = response.data;
+
                     // Call the function to append the popup to the page with the fetched data
-                    appendPopup(response.data);
+                    appendPopup(fetchedProducts);
                 } else {
                     console.error("Error fetching product data:", response.error);
                 }
@@ -74,14 +81,9 @@ const collectProductInfo = () => {
     return productInfo;
 };
 
-
 // Append the popup with product data
 const appendPopup = (fetchedData) => {
     console.log(fetchedData);
-    // Since data could be an array, loop through it to extract products
-    const products = fetchedData; // Adjusted to directly use fetched data as an array
-    console.log(products);
-
     // Create a div element to contain the popup
     const popup = document.createElement('div');
     popup.id = 'popup-element';  // Add an ID to the popup for easy reference
@@ -145,7 +147,7 @@ const appendPopup = (fetchedData) => {
 
     const container = document.getElementById('products-container'); // Get your existing container element
     
-    products.forEach(product => {
+    fetchedData.forEach(product => {
         // Product HTML Template
         const productHTML = `
             <div class="bg-white rounded-lg shadow-sm overflow-hidden w-40"> <!-- Adjust width as necessary -->
@@ -188,30 +190,27 @@ const addReopenButton = () => {
     reopenButton.style.cursor = 'pointer';  // Add a pointer cursor for better UX
 
     // Add the logo inside the button
-    reopenButton.innerHTML = `<img src="https://bonanza.mycpanel.rs/ajnakafu/images/logo.jpg" alt="Prox Logo" style="width: 60px; height: 60px;">`;
+    reopenButton.innerHTML = `<img src="https://bonanza.mycpanel.rs/ajnakafu/images/logo.jpg" alt="Reopen Popup" class="h-20">`;
 
-    // Append the reopen button to the body
-    document.body.appendChild(reopenButton);
-
-    // Add event listener to reopen the popup
+    // Add an event listener to toggle the popup and button when the button is clicked
     reopenButton.addEventListener('click', () => {
-        appendPopup();
         reopenButton.remove();
+        appendPopup(fetchedProducts);  // Pass stored product data to reopen the popup
     });
+
+    document.body.appendChild(reopenButton);
 };
 
-// Toggle between showing the popup and the reopen button
+// Toggle between showing the popup and the button
 const togglePopupAndButton = () => {
     const popup = document.getElementById('popup-element');
     const reopenButton = document.getElementById('reopen-button');
 
     if (popup) {
-        // If the popup is visible, close it and show the reopen button
         popup.remove();
         addReopenButton();
     } else if (reopenButton) {
-        // If the reopen button is visible, hide it and show the popup
         reopenButton.remove();
-        appendPopup();
+        appendPopup(fetchedProducts);  // Pass stored product data to reopen the popup
     }
 };
