@@ -10,26 +10,6 @@ linkFontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.
 linkFontAwesome.rel = 'stylesheet';
 document.head.appendChild(linkFontAwesome);
 
-const collectProductInfo = () => {
-    let productTitle = document.querySelector('#productTitle')?.textContent.trim();
-    let productPriceSymbol = document.querySelector('.a-price-symbol')?.textContent.trim();
-    let productPriceWhole = document.querySelector('.a-price-whole')?.textContent.trim().slice(0, -1);
-    let productPriceFraction = document.querySelector('.a-price-fraction')?.textContent.trim();
-    let productImage = document.querySelector('#landingImage')?.src;
-
-    if (!productTitle) {
-        productTitle = document.querySelector('span.a-text-bold')?.textContent.trim();
-    }
-
-    return {
-        title: productTitle || 'Title not found',
-        priceSymbol: productPriceSymbol || 'Symbol not found',
-        priceWhole: productPriceWhole || 'Price not found',
-        priceFraction: productPriceFraction || 'Fraction not found',
-        image: productImage || 'Image not found'
-    };
-};
-
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === "NEW") {
@@ -53,6 +33,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
+// Collect product information from the page
+const collectProductInfo = () => {
+    let productTitle = document.querySelector('#productTitle')?.textContent.trim();
+    let productPriceSymbol = document.querySelector('.a-price-symbol')?.textContent.trim();
+    let productPriceWhole = document.querySelector('.a-price-whole')?.textContent.trim().slice(0, -1);
+    let productPriceFraction = document.querySelector('.a-price-fraction')?.textContent.trim();
+    let productImage = document.querySelector('#landingImage')?.src;
+
+    if (!productTitle) {
+        productTitle = document.querySelector('span.a-text-bold')?.textContent.trim();
+    }
+
+    return {
+        title: productTitle || 'Title not found',
+        priceSymbol: productPriceSymbol || 'Symbol not found',
+        priceWhole: productPriceWhole || 'Price not found',
+        priceFraction: productPriceFraction || 'Fraction not found',
+        image: productImage || 'Image not found'
+    };
+};
 
 // Append the popup with product data
 const appendPopup = (fetchedData) => {
