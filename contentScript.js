@@ -113,7 +113,7 @@ const appendPopup = (fetchedData) => {
             <!-- Header -->
             <div class="p-2 bg-green-200 text-white flex justify-between items-center">
                 <!-- Logo Image -->
-                <img src="https://bonanza.mycpanel.rs/ajnakafu/images/logo.jpg" alt="Prox Logo" class="h-8">
+                <img src="https://bonanza.mycpanel.rs/ajnakafu/images/text_logo.jpg" alt="Prox Logo" class="h-8">
                 <button id="close-popup" class="text-white font-bold text-lg">✕</button>
             </div>
 
