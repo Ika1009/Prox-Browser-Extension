@@ -92,7 +92,7 @@ const appendPopup = (fetchedData) => {
     popup.style.right = '90px';
     popup.style.width = '300px';
     popup.style.height = '200px';
-    popup.style.zIndex = '1000';
+    popup.style.zIndex = '999999999';
 
     // Add the popup content with dynamic content
     popup.innerHTML = `
