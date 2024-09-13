@@ -90,7 +90,7 @@ const fetchProductData = async (productName) => {
         source: 'Amazon',
         title: item.title,
         price: item.price ? `${item.price} ${item.currency}` : 'N/A',
-        url: `https://www.amazon.com${item.url}`, // Ensure URL is complete
+        url: `https://www.amazon.com/${item.url}`, // Ensure URL is complete
         image: item.url_image,
         rating: item.rating || 'N/A',
         reviews: item.reviews_count || 0
@@ -100,7 +100,7 @@ const fetchProductData = async (productName) => {
       const amazonProducts = [...paidProducts, ...organicProducts];
 
       // Parse Google Shopping results
-      const googlePaidProducts = googleData.results.paid.map(item => ({
+      const googlePaidProducts = googleData.results[0].content.results.paid.map(item => ({
         source: 'Google Shopping',
         title: item.title,
         price: item.price || 'N/A', // Price is already formatted as a string
@@ -110,7 +110,7 @@ const fetchProductData = async (productName) => {
         reviews: item.reviews || 0
       }));
 
-      const googleOrganicProducts = googleData.results.organic.map(item => ({
+      const googleOrganicProducts = googleData.results[0].content.results.organic.map(item => ({
         source: 'Google Shopping',
         title: item.title,
         price: item.price || 'N/A', // Price is already formatted as a string
