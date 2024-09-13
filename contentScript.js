@@ -10,10 +10,33 @@ linkFontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.
 linkFontAwesome.rel = 'stylesheet';
 document.head.appendChild(linkFontAwesome);
 
+// Listen for messages from the background script
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === "NEW") {
+        const productInfo = collectProductInfo(); // Collect product info when "NEW" message is received
+        console.log(productInfo);
+        // Send product name to the background script to fetch additional data
+        chrome.runtime.sendMessage(
+            { type: "FETCH_PRODUCT_DATA", productName: productInfo.title }, 
+            (response) => {
+                if (response.success) {
+                    // Call the function to append the popup to the page with the fetched data
+                    appendPopup(response.data);
+                } else {
+                    console.error("Error fetching product data:", response.error);
+                }
+            }
+        );
+    } else if (request.type === "REOPEN_POPUP") {
+        // Toggle between showing the popup and the button
+        togglePopupAndButton();
+    }
+});
+
 // Collect product information based on the current website
 const collectProductInfo = () => {
     let productInfo = {};
-    
+
     // Detect the website
     const website = window.location.hostname;
 
@@ -50,29 +73,6 @@ const collectProductInfo = () => {
 
     return productInfo;
 };
-
-// Listen for messages from the background script
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === "NEW") {
-        const productInfo = collectProductInfo(); // Collect product info when "NEW" message is received
-
-        // Send product name to the background script to fetch additional data
-        chrome.runtime.sendMessage(
-            { type: "FETCH_PRODUCT_DATA", productName: productInfo.title }, 
-            (response) => {
-                if (response.success) {
-                    // Call the function to append the popup to the page with the fetched data
-                    appendPopup(response.data);
-                } else {
-                    console.error("Error fetching product data:", response.error);
-                }
-            }
-        );
-    } else if (request.type === "REOPEN_POPUP") {
-        // Toggle between showing the popup and the button
-        togglePopupAndButton();
-    }
-});
 
 
 // Append the popup with product data
