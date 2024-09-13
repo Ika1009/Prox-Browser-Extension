@@ -131,7 +131,7 @@ const appendPopup = (fetchedData) => {
     
     fetchedData.forEach(product => {
         // Check if the price is "N/A" or another invalid price value
-        if (product.price !== 'N/A' && product.price !== '') {
+        if (product.price !== 'N/A' && product.price !== '' && !product.url.includes('undefined')) {
             // Product HTML Template
             const productHTML = `
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden w-40"> <!-- Adjust width as necessary -->
