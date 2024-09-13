@@ -190,7 +190,7 @@ const addReopenButton = () => {
     reopenButton.style.cursor = 'pointer';  // Add a pointer cursor for better UX
 
     // Add the logo inside the button
-    reopenButton.innerHTML = `<img src="https://bonanza.mycpanel.rs/ajnakafu/images/logo.jpg" alt="Reopen Popup" class="h-20">`;
+    reopenButton.innerHTML = `<img src="https://bonanza.mycpanel.rs/ajnakafu/images/logo.jpg" alt="Prox Logo" style="width: 60px; height: 60px;">`;
 
     // Add an event listener to toggle the popup and button when the button is clicked
     reopenButton.addEventListener('click', () => {
