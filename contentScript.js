@@ -113,42 +113,13 @@ const appendPopup = (fetchedData) => {
             <!-- Header -->
             <div class="p-2 bg-gray-300 text-white flex justify-between items-center">
                 <!-- Logo Image -->
-                <img src="https://bonanza.mycpanel.rs/ajnakafu/images/text_logo.jpg" alt="Prox Logo" class="h-8">
+                <img src="https://bonanza.mycpanel.rs/ajnakafu/images/text_logo.png" alt="Prox Logo" class="h-8">
                 <button id="close-popup" class="text-white font-bold text-lg">✕</button>
-            </div>
-
-            <!-- Filters and Buttons -->
-            <div class="p-2 flex items-center bg-gray-50 border-b border-gray-200 space-x-1">
-                <!-- Set Alert Button with Bell Icon -->
-                <button class="font-bold text-green-900 px-3 py-2 rounded-md flex items-center space-x-1">
-                    <i class="far fa-bell"></i>
-                    <span>Set Alert</span>
-                </button>
-
-                <!-- Filters Button with Gear Icon -->
-                <button class="font-bold text-green-900 px-3 py-2 rounded-md flex items-center space-x-1">
-                    <i class="fas fa-sliders"></i>
-                    <span>Filters</span>
-                </button>
-
-                <!-- Add your sizes Button with Plus Icon -->
-                <button class="font-bold text-green-900 px-3 py-2 rounded-md flex items-center space-x-1">
-                    <i class="fas fa-plus"></i>
-                    <span>Add your sizes</span>
-                </button>
             </div>
 
             <!-- Content Section -->
             <div id='products-container' class="p-4 max-h-96 overflow-auto flex flex-wrap gap-2">
                 
-            </div>
-
-            <!-- Icon Row at the End of Popup -->
-            <div class="flex justify-around p-4 border-t border-gray-200">
-                <i class="fas fa-home text-lg text-teal-900"></i>       <!-- Outlined Home Icon -->
-                <i class="far fa-bookmark text-lg text-gray-600"></i>   <!-- Outlined Bookmark Icon -->
-                <i class="far fa-bell text-lg text-gray-600"></i>       <!-- Outlined Bell Icon -->
-                <i class="fas fa-bars text-lg text-gray-600"></i>       <!-- Menu Icon -->
             </div>
         </div>
     `;
