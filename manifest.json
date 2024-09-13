@@ -36,9 +36,11 @@
   ],
   "action": {
     "default_icon": {
-      "16": "assets/logo.jpg",
-      "24": "assets/logo.jpg",
-      "32": "assets/logo.jpg"
+      "16": "assets/logo_16.png",
+      "24": "assets/logo_24.png",
+      "32": "assets/logo_32.png",
+      "48": "assets/logo_48.png",
+      "64": "assets/logo_64.png"
     },
     "default_title": "Prox Alternative Shopper"
   },
