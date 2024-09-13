@@ -114,7 +114,7 @@ const appendPopup = (fetchedData) => {
             <div class="p-2 bg-gray-300 text-white flex justify-between items-center">
                 <!-- Logo Image -->
                 <img src="https://bonanza.mycpanel.rs/ajnakafu/images/text_logo.png" alt="Prox Logo" class="h-8">
-                <button id="close-popup" class="text-white font-bold text-lg">✕</button>
+                <button id="close-popup" class="text-blue-900 font-bold text-lg">✕</button>
             </div>
 
             <!-- Content Section -->
