@@ -10,6 +10,47 @@ linkFontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.
 linkFontAwesome.rel = 'stylesheet';
 document.head.appendChild(linkFontAwesome);
 
+// Collect product information based on the current website
+const collectProductInfo = () => {
+    let productInfo = {};
+    
+    // Detect the website
+    const website = window.location.hostname;
+
+    if (website.includes('amazon')) {
+        // Amazon product info collection
+        productInfo = {
+            title: document.querySelector('#productTitle')?.textContent.trim() || 'Title not found',
+            priceSymbol: document.querySelector('.a-price-symbol')?.textContent.trim() || 'Symbol not found',
+            priceWhole: document.querySelector('.a-price-whole')?.textContent.trim().slice(0, -1) || 'Price not found',
+            priceFraction: document.querySelector('.a-price-fraction')?.textContent.trim() || 'Fraction not found',
+            image: document.querySelector('#landingImage')?.src || 'Image not found'
+        };
+    } else if (website.includes('walmart')) {
+        // Walmart product info collection
+        productInfo = {
+            title: document.querySelector('h1.prod-ProductTitle')?.textContent.trim() || 'Title not found',
+            priceSymbol: '$',
+            priceWhole: document.querySelector('span.price-group')?.textContent.trim().split('.')[0] || 'Price not found',
+            priceFraction: document.querySelector('span.price-group')?.textContent.trim().split('.')[1] || '00',
+            image: document.querySelector('img.prod-hero-image-image')?.src || 'Image not found'
+        };
+    } else if (website.includes('target')) {
+        // Target product info collection
+        productInfo = {
+            title: document.querySelector('h1[data-test="product-title"]')?.textContent.trim() || 'Title not found',
+            priceSymbol: '$',
+            priceWhole: document.querySelector('span[data-test="product-price"]')?.textContent.trim().split('.')[0] || 'Price not found',
+            priceFraction: document.querySelector('span[data-test="product-price"]')?.textContent.trim().split('.')[1] || '00',
+            image: document.querySelector('img[data-test="product-image"]')?.src || 'Image not found'
+        };
+    } else {
+        console.error("Unsupported website");
+    }
+
+    return productInfo;
+};
+
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === "NEW") {
@@ -33,26 +74,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
-// Collect product information from the page
-const collectProductInfo = () => {
-    let productTitle = document.querySelector('#productTitle')?.textContent.trim();
-    let productPriceSymbol = document.querySelector('.a-price-symbol')?.textContent.trim();
-    let productPriceWhole = document.querySelector('.a-price-whole')?.textContent.trim().slice(0, -1);
-    let productPriceFraction = document.querySelector('.a-price-fraction')?.textContent.trim();
-    let productImage = document.querySelector('#landingImage')?.src;
-
-    if (!productTitle) {
-        productTitle = document.querySelector('span.a-text-bold')?.textContent.trim();
-    }
-
-    return {
-        title: productTitle || 'Title not found',
-        priceSymbol: productPriceSymbol || 'Symbol not found',
-        priceWhole: productPriceWhole || 'Price not found',
-        priceFraction: productPriceFraction || 'Fraction not found',
-        image: productImage || 'Image not found'
-    };
-};
 
 // Append the popup with product data
 const appendPopup = (fetchedData) => {
