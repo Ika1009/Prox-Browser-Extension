@@ -98,7 +98,7 @@ const fetchProductData = async (productName) => {
 
       // Combine paid and organic products
       const amazonProducts = [...paidProducts, ...organicProducts];
-      /*
+      
       // Parse Google Shopping results
       const googlePaidProducts = googleData.results[0].content.results.paid.map(item => ({
         source: 'Google Shopping',
@@ -122,14 +122,9 @@ const fetchProductData = async (productName) => {
 
       // Combine paid and organic products for Google
       const googleProducts = [...googlePaidProducts, ...googleOrganicProducts];
-      */
-      console.log("AMAZON PRODUCTS ")
-      console.log(amazonProducts)
-      //console.log("GOOGLE PRODUCTS ")
-      //console.log(googleProducts)
 
       // Combine both results into a unified format
-      const products = [...amazonProducts];
+      const products = [...amazonProducts, ...googleProducts];
       return products;
     } else {
       // Handle error cases for responses
