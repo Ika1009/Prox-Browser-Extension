@@ -147,7 +147,7 @@ const appendPopup = (fetchedData) => {
     
     products.forEach(product => {
         // Set a maximum length for the title
-        const maxTitleLength = 50; // Change this value to suit your design
+        const maxTitleLength = 20; // Change this value to suit your design
         
         // Shorten the title if it's too long
         let shortenedTitle = product.title.length > maxTitleLength 
