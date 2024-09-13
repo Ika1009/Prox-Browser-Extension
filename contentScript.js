@@ -57,13 +57,24 @@ const collectProductInfo = () => {
             image: document.querySelector('#landingImage')?.src || 'Image not found'
         };
     } else if (website.includes('walmart')) {
+        let priceText = document.querySelector('span[itemprop="price"]')?.textContent.trim() || 'Price not found';
+    
+        // Check if the price contains "Now" indicating a sale
+        if (priceText.includes('Now')) {
+            priceText = priceText.replace('Now', '').trim(); // Remove "Now" from the price string
+        }
+        
+        // Extract the price symbol and parts
+        const priceSymbol = priceText.charAt(0);  // Assume first character is the symbol
+        const priceParts = priceText.slice(1).split('.');  // Split by decimal to get whole and fraction
+
         // Walmart product info collection
         productInfo = {
-            title: document.querySelector('h1.prod-ProductTitle')?.textContent.trim() || 'Title not found',
-            priceSymbol: '$',
-            priceWhole: document.querySelector('span.price-group')?.textContent.trim().split('.')[0] || 'Price not found',
-            priceFraction: document.querySelector('span.price-group')?.textContent.trim().split('.')[1] || '00',
-            image: document.querySelector('img.prod-hero-image-image')?.src || 'Image not found'
+            title: document.querySelector('h1#main-title')?.textContent.trim() || 'Title not found',
+            priceSymbol: priceSymbol || '$',  // Default to $ if no symbol is found
+            priceWhole: priceParts[0] || 'Price not found',  // Get whole part
+            priceFraction: priceParts[1] || '00',  // Get fraction part
+            image: document.querySelector('div[data-testid="stack-item-dynamic-zoom-image-lazy"] img')?.src || 'Image not found'
         };
     } else if (website.includes('target')) {
         // Target product info collection
@@ -72,7 +83,7 @@ const collectProductInfo = () => {
             priceSymbol: '$',
             priceWhole: document.querySelector('span[data-test="product-price"]')?.textContent.trim().split('.')[0] || 'Price not found',
             priceFraction: document.querySelector('span[data-test="product-price"]')?.textContent.trim().split('.')[1] || '00',
-            image: document.querySelector('img[data-test="product-image"]')?.src || 'Image not found'
+            image: document.querySelector('div[data-test="image-gallery-item-0"] img')?.src || 'Image not found'
         };
     } else {
         console.error("Unsupported website");
