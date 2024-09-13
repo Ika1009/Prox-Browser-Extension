@@ -146,13 +146,21 @@ const appendPopup = (fetchedData) => {
     const container = document.getElementById('products-container'); // Get your existing container element
     
     products.forEach(product => {
+        // Set a maximum length for the title
+        const maxTitleLength = 50; // Change this value to suit your design
+        
+        // Shorten the title if it's too long
+        let shortenedTitle = product.title.length > maxTitleLength 
+            ? product.title.substring(0, maxTitleLength) + "..." 
+            : product.title;
+    
         // Product HTML Template
         const productHTML = `
             <div class="bg-white rounded-lg shadow-sm overflow-hidden w-40"> <!-- Adjust width as necessary -->
                 <a href="${product.url}" target="_blank" class="block hover:bg-gray-100">
                     <img src="${product.image}" alt="${product.title}" class="w-full h-32 object-cover">
                     <div class="p-2">
-                        <h3 class="text-sm font-semibold">${product.title}</h3>
+                        <h3 class="text-sm font-semibold">${shortenedTitle}</h3>
                         <div class="flex items-center mt-2">
                             <span class="text-lg font-bold text-green-600">
                                 ${product.price}
@@ -162,10 +170,10 @@ const appendPopup = (fetchedData) => {
                 </a>
             </div>
         `;
-
+    
         // Append the HTML to the existing container
         container.innerHTML += productHTML;
-    });
+    });    
 
     // Add event listener to close the popup when the close button is clicked
     document.getElementById('close-popup').addEventListener('click', () => {
