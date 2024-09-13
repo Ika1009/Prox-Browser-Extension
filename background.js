@@ -13,13 +13,20 @@ chrome.action.onClicked.addListener((tab) => {
 });
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === "FETCH_PRODUCT_DATA") {
-    console.log(request.productName);
+    console.log(request.productName); // Log the requested product name
     fetchProductData(request.productName)
-      .then(data => sendResponse({ success: true, data }))
-      .catch(error => sendResponse({ success: false, error: error.message }));
+      .then(data => {
+        console.log("Response data:", data); // Log the response data
+        sendResponse({ success: true, data }); // Send the response
+      })
+      .catch(error => {
+        console.log("Error:", error.message); // Log the error message
+        sendResponse({ success: false, error: error.message }); // Send the response with error
+      });
     return true; // Keep the message channel open for async response
   }
 });
+
 
 const fetchProductData = async (productName) => {
   try {
@@ -69,18 +76,31 @@ const fetchProductData = async (productName) => {
       const googleData = await googleResponse.json();
 
       // Parse Amazon results
-      const amazonProducts = amazonData.results.map(item => ({
+      const paidProducts = amazonData.results[0].content.results.paid.map(item => ({
         source: 'Amazon',
         title: item.title,
-        price: item.price ? `${item.price.value} ${item.price.currency}` : 'N/A', // Format price from object
-        url: item.product_url,
-        image: item.main_image,
+        price: item.price ? `${item.price} ${item.currency}` : 'N/A',
+        url: `https://www.amazon.com${item.url}`, // Ensure URL is complete
+        image: item.url_image,
         rating: item.rating || 'N/A',
-        reviews: item.reviews || 0
+        reviews: item.reviews_count || 0
       }));
 
+      const organicProducts = amazonData.results[0].content.results.organic.map(item => ({
+        source: 'Amazon',
+        title: item.title,
+        price: item.price ? `${item.price} ${item.currency}` : 'N/A',
+        url: `https://www.amazon.com${item.url}`, // Ensure URL is complete
+        image: item.url_image,
+        rating: item.rating || 'N/A',
+        reviews: item.reviews_count || 0
+      }));
+
+      // Combine paid and organic products
+      const amazonProducts = [...paidProducts, ...organicProducts];
+
       // Parse Google Shopping results
-      const googleProducts = googleData.results.map(item => ({
+      const googlePaidProducts = googleData.results.paid.map(item => ({
         source: 'Google Shopping',
         title: item.title,
         price: item.price || 'N/A', // Price is already formatted as a string
@@ -89,6 +109,24 @@ const fetchProductData = async (productName) => {
         rating: item.rating || 'N/A',
         reviews: item.reviews || 0
       }));
+
+      const googleOrganicProducts = googleData.results.organic.map(item => ({
+        source: 'Google Shopping',
+        title: item.title,
+        price: item.price || 'N/A', // Price is already formatted as a string
+        url: item.link,
+        image: item.image,
+        rating: item.rating || 'N/A',
+        reviews: item.reviews || 0
+      }));
+
+      // Combine paid and organic products for Google
+      const googleProducts = [...googlePaidProducts, ...googleOrganicProducts];
+
+      console.log("AMAZON PRODUCTS ")
+      console.log(amazonProducts)
+      console.log("GOOGLE PRODUCTS ")
+      console.log(googleProducts)
 
       // Combine both results into a unified format
       const products = [...amazonProducts, ...googleProducts];
