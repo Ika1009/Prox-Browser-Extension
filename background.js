@@ -73,7 +73,7 @@ const fetchProductData = async (productName) => {
 
     if (amazonResponse.ok && googleResponse.ok) {
       const amazonData = await amazonResponse.json();
-      //const googleData = await googleResponse.json();
+      const googleData = await googleResponse.json();
 
       // Parse Amazon results
       const paidProducts = amazonData.results[0].content.results.paid.map(item => ({
