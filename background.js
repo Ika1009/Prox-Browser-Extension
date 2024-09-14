@@ -101,7 +101,7 @@ const fetchProductData = async (productName) => {
       console.log("GUGL DATA");
       console.log(googleData);
 
-      const defaultURL = googleData.results.content.url;
+      const defaultURL = googleData.results[0].content.url;
       // Parse Google Shopping results
       const googlePaidProducts = googleData.results[0].content.results.paid.map(item => ({
         source: 'Google Shopping',
