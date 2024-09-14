@@ -100,34 +100,53 @@ const fetchProductData = async (productName) => {
       const amazonProducts = [...paidProducts, ...organicProducts];
       console.log("GUGL DATA");
       console.log(googleData);
-
+      
       const defaultURL = googleData.results[0].content.url;
-      // Parse Google Shopping results
-      const googlePaidProducts = googleData.results[0].content.results.paid.map(item => ({
-        source: 'Google Shopping',
-        title: item.title,
-        price: item.price_str || item.price || 'N/A', // Price is already formatted as a string
-        url: item.url || defaultURL,
-        image: item.thumbnail,
-        rating: item.rating || 'N/A',
-        reviews: item.reviews || 0
-      }));
-
-      const googleOrganicProducts = googleData.results[0].content.results.organic.map(item => ({
-        source: 'Google Shopping',
-        title: item.title,
-        price: item.price_str || item.price || 'N/A', // Price is already formatted as a string
-        url: item.url || defaultURL,
-        image: item.thumbnail,
-        rating: item.rating || 'N/A',
-        reviews: item.reviews || 0
-      }));
-
-      // Combine paid and organic products for Google
-      const googleProducts = [...googlePaidProducts, ...googleOrganicProducts];
-
-      // Combine both results into a unified format
+      
+      // Check if PLA (Product Listing Ads) results are available
+      const googlePLAProducts = googleData.results[0].content.results.pla;
+      let googleProducts;
+      
+      if (googlePLAProducts && googlePLAProducts.length > 0) {
+        // Use only PLA results if they exist
+        googleProducts = googlePLAProducts.map(item => ({
+          source: 'Google Shopping',
+          title: item.title,
+          price: item.price_str || item.price || 'N/A',
+          url: item.url || defaultURL,
+          image: item.thumbnail,
+          rating: item.rating || 'N/A',
+          reviews: item.reviews || 0
+        }));
+      } else {
+        // If PLA results do not exist, fall back to paid and organic results
+        const googlePaidProducts = googleData.results[0].content.results.paid.map(item => ({
+          source: 'Google Shopping',
+          title: item.title,
+          price: item.price_str || item.price || 'N/A',
+          url: item.url || defaultURL,
+          image: item.thumbnail,
+          rating: item.rating || 'N/A',
+          reviews: item.reviews || 0
+        }));
+      
+        const googleOrganicProducts = googleData.results[0].content.results.organic.map(item => ({
+          source: 'Google Shopping',
+          title: item.title,
+          price: item.price_str || item.price || 'N/A',
+          url: item.url || defaultURL,
+          image: item.thumbnail,
+          rating: item.rating || 'N/A',
+          reviews: item.reviews || 0
+        }));
+      
+        // Combine paid and organic products if PLA is not available
+        googleProducts = [...googlePaidProducts, ...googleOrganicProducts];
+      }
+      
+      // Combine both Google and Amazon results into a unified format
       const products = [...amazonProducts, ...googleProducts];
+      
       return products;
     } else {
       // Handle error cases for responses
