@@ -130,25 +130,28 @@ const appendPopup = (fetchedData) => {
     const container = document.getElementById('products-container'); // Get your existing container element
     
     fetchedData.forEach(product => {
-        // Product HTML Template
-        const productHTML = `
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden w-40"> <!-- Adjust width as necessary -->
-                <a href="${product.url}" target="_blank" class="block hover:bg-gray-100">
-                    <img src="${product.image}" alt="${product.title}" class="w-full h-32 object-cover">
-                    <div class="p-2">
-                        <h3 class="text-sm font-semibold truncate">${product.title}</h3>
-                        <div class="flex items-center mt-2">
-                            <span class="text-base font-bold text-green-600">
-                                ${product.price}
-                            </span>
+        // Check if the price is "N/A" or another invalid price value
+        if (product.price !== 'N/A' && product.price !== '' && !product.url.includes('undefined')) {
+            // Product HTML Template
+            const productHTML = `
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden w-40"> <!-- Adjust width as necessary -->
+                    <a href="${product.url}" target="_blank" class="block hover:bg-gray-100">
+                        <img src="${product.image}" alt="${product.title}" class="w-full h-32 object-cover">
+                        <div class="p-2">
+                            <h3 class="text-sm font-semibold truncate">${product.title}</h3>
+                            <div class="flex items-center mt-2">
+                                <span class="text-base font-bold text-green-600">
+                                    ${product.price}
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
-        `;
-
-        // Append the HTML to the existing container
-        container.innerHTML += productHTML;
+                    </a>
+                </div>
+            `;
+    
+            // Append the HTML to the existing container
+            container.innerHTML += productHTML;
+        }
     });       
 
     // Add event listener to close the popup when the close button is clicked
