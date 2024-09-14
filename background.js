@@ -98,14 +98,17 @@ const fetchProductData = async (productName) => {
 
       // Combine paid and organic products
       const amazonProducts = [...paidProducts, ...organicProducts];
-      
+      console.log("GUGL DATA");
+      console.log(googleData);
+
+      const defaultURL = googleData.results.content.url;
       // Parse Google Shopping results
       const googlePaidProducts = googleData.results[0].content.results.paid.map(item => ({
         source: 'Google Shopping',
         title: item.title,
-        price: item.price || 'N/A', // Price is already formatted as a string
-        url: item.link,
-        image: item.image,
+        price: item.price_str || item.price || 'N/A', // Price is already formatted as a string
+        url: item.url || defaultURL,
+        image: item.thumbnail,
         rating: item.rating || 'N/A',
         reviews: item.reviews || 0
       }));
@@ -113,9 +116,9 @@ const fetchProductData = async (productName) => {
       const googleOrganicProducts = googleData.results[0].content.results.organic.map(item => ({
         source: 'Google Shopping',
         title: item.title,
-        price: item.price || 'N/A', // Price is already formatted as a string
-        url: item.link,
-        image: item.image,
+        price: item.price_str || item.price || 'N/A', // Price is already formatted as a string
+        url: item.url || defaultURL,
+        image: item.thumbnail,
         rating: item.rating || 'N/A',
         reviews: item.reviews || 0
       }));
