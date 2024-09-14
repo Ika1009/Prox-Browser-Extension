@@ -109,7 +109,7 @@ const fetchProductData = async (productName) => {
       
       if (googlePLAProducts && googlePLAProducts.length > 0) {
         // Use only PLA results if they exist
-        googleProducts = googlePLAProducts.map(item => ({
+        googleProducts = googlePLAProducts[0].items.map(item => ({
           source: 'Google Shopping',
           title: item.title,
           price: item.price_str || item.price || 'N/A',
