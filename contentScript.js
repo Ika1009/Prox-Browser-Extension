@@ -104,7 +104,7 @@ const appendPopup = (fetchedData) => {
     popup.style.bottom = '450px';
     popup.style.right = '90px';
     popup.style.width = '300px';
-    popup.style.height = '200px';
+    popup.style.height = '200px';  // Adjust height as necessary
     popup.style.zIndex = '999999999';
 
     // Add the popup content with dynamic content
@@ -117,9 +117,39 @@ const appendPopup = (fetchedData) => {
                 <button id="close-popup" class="text-blue-900 font-bold text-lg">✕</button>
             </div>
 
+            <!-- Search and Filter Section -->
+            <div class="p-4 flex flex-col space-y-2">
+                <!-- Search Input -->
+                <div class="flex items-center gap-2"> <!-- Added gap for spacing -->
+                    <input id="search-input" type="text" placeholder="Search products..." 
+                        class="w-full h-10 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:border-gray-500"
+                    />
+                    <button id="search-btn" class="h-8 w-12 rounded-full flex items-center justify-center">
+                        <i class="fas fa-search text-gray-700 text-lg"></i>
+                    </button>
+                </div>
+                <!-- Price Range Filter -->
+                <div>
+                    <label for="price-range" class="text-sm font-semibold">Filter by price:</label>
+                    <input id="price-min" type="number" placeholder="Min" class="w-20 border rounded px-2">
+                    <input id="price-max" type="number" placeholder="Max" class="w-20 border rounded px-2">
+                </div>
+                <!-- Retailer Filter -->
+                <div>
+                    <label for="retailer-select" class="text-sm font-semibold">Filter by retailer:</label>
+                    <select id="retailer-select" class="w-full border border-gray-300 rounded">
+                        <option value="">All Retailers</option>
+                        <option value="amazon">Amazon</option>
+                        <option value="walmart">Walmart</option>
+                        <option value="target">Target</option>
+                        <option value="google">Google</option>
+                    </select>
+                </div>
+            </div>
+
             <!-- Content Section -->
-            <div id='products-container' class="p-4 max-h-96 overflow-auto flex flex-wrap gap-2">
-                
+            <div id="products-container" class="p-4 max-h-96 overflow-auto flex flex-wrap gap-2">
+                <!-- Product items will be appended here -->
             </div>
         </div>
     `;
@@ -129,30 +159,64 @@ const appendPopup = (fetchedData) => {
 
     const container = document.getElementById('products-container'); // Get your existing container element
     
-    fetchedData.forEach(product => {
-        // Check if the price is "N/A" or another invalid price value
-        if (product.price !== 'N/A' && product.price !== '' && !product.url.includes('undefined')) {
-            // Product HTML Template
-            const productHTML = `
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden w-40"> <!-- Adjust width as necessary -->
-                    <a href="${product.url}" target="_blank" class="block hover:bg-gray-100">
-                        <img src="${product.image}" alt="${product.title}" class="w-full h-32 object-cover">
-                        <div class="p-2">
-                            <h3 class="text-sm font-semibold truncate">${product.title}</h3>
-                            <div class="flex items-center mt-2">
-                                <span class="text-base font-bold text-green-600">
-                                    ${product.price}
-                                </span>
+    // Function to render products
+    const displayProducts = (products) => {
+        container.innerHTML = ''; // Clear current products
+        products.forEach(product => {
+            if (product.price !== 'N/A' && product.price !== '' && !product.url.includes('undefined')) {
+                const productHTML = `
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden w-40"> <!-- Adjust width as necessary -->
+                        <a href="${product.url}" target="_blank" class="block hover:bg-gray-100">
+                            <img src="${product.image}" alt="${product.title}" class="w-full h-32 object-cover">
+                            <div class="p-2">
+                                <h3 class="text-sm font-semibold truncate">${product.title}</h3>
+                                <div class="flex items-center mt-2">
+                                    <span class="text-base font-bold text-green-600">
+                                        ${product.price}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-            `;
-    
-            // Append the HTML to the existing container
-            container.innerHTML += productHTML;
-        }
-    });       
+                        </a>
+                    </div>
+                `;
+                container.innerHTML += productHTML;
+            }
+        });
+    };
+
+    // Initial display of all products
+    displayProducts(fetchedData);
+
+    // Add event listener for search button
+    document.getElementById('search-btn').addEventListener('click', () => {
+        const searchQuery = document.getElementById('search-input').value.toLowerCase();
+        const filteredProducts = fetchedData.filter(product =>
+            product.title.toLowerCase().includes(searchQuery)
+        );
+        displayProducts(filteredProducts);
+    });
+
+    // Add event listener for price and retailer filter
+    document.getElementById('price-max').addEventListener('change', () => applyFilters());
+    document.getElementById('price-min').addEventListener('change', () => applyFilters());
+    document.getElementById('retailer-select').addEventListener('change', () => applyFilters());
+
+    // Function to apply all filters
+    const applyFilters = () => {
+        const minPrice = parseFloat(document.getElementById('price-min').value) || 0;
+        const maxPrice = parseFloat(document.getElementById('price-max').value) || Infinity;
+        const selectedRetailer = document.getElementById('retailer-select').value;
+
+        const filteredProducts = fetchedData.filter(product => {
+            const productPrice = parseFloat(product.price.replace(/[^0-9.-]+/g, '')); // Remove symbols and convert to number
+            const isInPriceRange = productPrice >= minPrice && productPrice <= maxPrice;
+            const isRetailerMatch = selectedRetailer ? product.url.includes(selectedRetailer) : true;
+
+            return isInPriceRange && isRetailerMatch;
+        });
+
+        displayProducts(filteredProducts);
+    };
 
     // Add event listener to close the popup when the close button is clicked
     document.getElementById('close-popup').addEventListener('click', () => {
