@@ -109,10 +109,15 @@ const appendPopup = (fetchedData) => {
                     <option value="high-low">High to Low</option>
                 </select>
                 <select id="retailer-select" class="h-10 px-3 border border-gray-300 rounded-full">
-                    <option value="none">Sort by Retailer</option>
+                    <option value="none">Retailer</option>
                     <option value="amazon">Amazon</option>
                     <option value="walmart">Walmart</option>
                     <option value="target">Target</option>
+                </select>
+                <select id="retailer-select" class="h-10 px-3 border border-gray-300 rounded-full">
+                    <option value="none">Usage</option>
+                    <option value="new">New</option>
+                    <option value="used">Used</option>
                 </select>
             </div>
             <div class="p-2 flex flex-col space-y-2">
