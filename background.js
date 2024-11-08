@@ -27,9 +27,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-
 const fetchProductData = async (productName) => {
   try {
+    // Fetch location data from IPInfo
+    const locationResponse = await fetch('https://ipinfo.io?token=3f5d78e7d93fef');
+    const locationData = await locationResponse.json();
+    const country = locationData.country; // Extract country for geo_location
+    console.log(country)
     const [amazonResponse, googleResponse] = await Promise.all([
       fetch('https://realtime.oxylabs.io/v1/queries', {
         method: 'POST',
@@ -42,6 +46,7 @@ const fetchProductData = async (productName) => {
           domain: 'com',
           query: productName,
           parse: true,
+          geo_location: country,  // Send country as geo_location
           context: [
             {
               key: 'autoselect_variant',
@@ -54,13 +59,14 @@ const fetchProductData = async (productName) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + btoa('_prox_RQ99U:Miloskralj2005_') // Replace with your own credentials
+          'Authorization': 'Basic ' + btoa('_prox_RQ99U:Miloskralj2005_') 
         },
         body: JSON.stringify({
           source: 'google_shopping_search',
           domain: 'com',
           query: productName,
           parse: true,
+          geo_location: country,  // Send country as geo_location
           context: [
             {
               key: 'autoselect_variant',
