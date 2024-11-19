@@ -26,27 +26,43 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true; // Keep the message channel open for async response
   }
 });
-
 const fetchProductData = async (productName) => {
   try {
     // Fetch location data from IPInfo
     const locationResponse = await fetch('https://ipinfo.io?token=3f5d78e7d93fef');
     const locationData = await locationResponse.json();
-    const country = locationData.country; // Extract country for geo_location
-    console.log(country)
+
+    // Extract latitude and longitude from `loc` field
+    const country = locationData.country; // Country code (e.g., US, RS)
+    const postal = locationData.postal;   // Postal code
+    const loc = locationData.loc;         // Loc contains "latitude,longitude"
+
+    if (!loc) {
+      throw new Error('IPInfo did not return location coordinates.');
+    }
+
+    const [latitude, longitude] = loc.split(',');
+
+    // Log extracted data
+    console.log(`Country: ${country}, Postal: ${postal}, Latitude: ${latitude}, Longitude: ${longitude}`);
+
+    // Prepare headers with geo-location using latitude and longitude
+    const geoHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + btoa('_prox_RQ99U:Miloskralj2005_'),
+      'x-oxylabs-geo-location': `lat: ${latitude}, lng: ${longitude}, rad: 25000`
+    };
+
+    // Fetch data from Oxylabs APIs
     const [amazonResponse, googleResponse] = await Promise.all([
       fetch('https://realtime.oxylabs.io/v1/queries', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + btoa('_prox_RQ99U:Miloskralj2005_')
-        },
+        headers: geoHeaders,
         body: JSON.stringify({
           source: 'amazon_search',
           domain: 'com',
           query: productName,
           parse: true,
-          geo_location: country,  // Send country as geo_location
           context: [
             {
               key: 'autoselect_variant',
@@ -57,16 +73,12 @@ const fetchProductData = async (productName) => {
       }),
       fetch('https://realtime.oxylabs.io/v1/queries', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + btoa('_prox_RQ99U:Miloskralj2005_') 
-        },
+        headers: geoHeaders,
         body: JSON.stringify({
           source: 'google_shopping_search',
           domain: 'com',
           query: productName,
           parse: true,
-          geo_location: country,  // Send country as geo_location
           context: [
             {
               key: 'autoselect_variant',
