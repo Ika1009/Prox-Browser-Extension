@@ -25,7 +25,8 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "assets/*.jpg"
+        "assets/*.jpg",
+        "images/*"
       ],
       "matches": [
         "https://*.www.amazon.com/*",

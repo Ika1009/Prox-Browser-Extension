@@ -94,11 +94,14 @@ const appendPopup = (fetchedData) => {
     popup.style.width = '300px';
     popup.style.height = '200px';
     popup.style.zIndex = '999999999';
+    
+    // Get the full URL of the image within the extension
+    const logoUrl = chrome.runtime.getURL('images/text_logo.png');
 
     popup.innerHTML = `
         <div class="w-96 bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="p-2 bg-gray-300 text-white flex justify-between items-center">
-                <img src="./img/text_logo.png" alt="Prox Logo" class="h-8">
+                <img src="${logoUrl}" alt="Prox Logo" class="h-8">
                 <button id="close-popup" class="text-blue-900 font-bold text-lg">✕</button>
             </div>
             
